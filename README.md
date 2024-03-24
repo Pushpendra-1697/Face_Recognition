@@ -22,3 +22,6 @@ Then do the following steps:
     (or)
     npm start
 ```
+
+## Screenshot
+![Screenshot (585)](https://github.com/Pushpendra-1697/Face_Recognition/assets/104748364/917ff74a-3fb6-41bd-99bd-29e3f6917cd2)
