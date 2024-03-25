@@ -1,10 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import './App.css';
 
 function App() {
   const videoRef = useRef();
   const canvasRef = useRef();
+  const [message, setMessage] = useState('');
 
   // Load from useEffect hook in mounted phase
   useEffect(() => {
@@ -52,9 +53,21 @@ function App() {
         height: 650
       });
 
-      faceapi.draw.drawDetections(canvasRef.current, resized)
-      faceapi.draw.drawFaceLandmarks(canvasRef.current, resized)
-      faceapi.draw.drawFaceExpressions(canvasRef.current, resized)
+      faceapi.draw.drawDetections(canvasRef.current, resized);
+      faceapi.draw.drawFaceLandmarks(canvasRef.current, resized);
+      faceapi.draw.drawFaceExpressions(canvasRef.current, resized); // angry, disgusted, fearful, happy, neutral, sad, surprised
+      resized.forEach((result) => {
+        let confidenceMessage = '';
+        const confidence = result.detection.score;
+        if (confidence < 0.3) {
+          confidenceMessage = 'Poor';
+        } else if (confidence >= 0.3 && confidence < 0.6) {
+          confidenceMessage = 'Normal';
+        } else {
+          confidenceMessage = 'High';
+        }
+        setMessage(`Confidence: ${confidenceMessage}`);
+      });
     }, 1000);
   };
 
@@ -66,6 +79,7 @@ function App() {
         <video crossOrigin="anonymous" ref={videoRef} autoPlay></video>
       </div>
       <canvas ref={canvasRef} width="940" height="650" className="appCanvas" />
+      <p>{message}</p>
     </div>
   );
 }
